@@ -11,26 +11,31 @@ import static org.junit.Assert.assertThat;
 
 public class RecorderTest {
   private Recorder r;
+  private HttpGatewayStub httpGatewayStub;
 
   @Before
   public void initialize() {
-    r = new Recorder(null);
+    httpGatewayStub = new HttpGatewayStub();
+    r = new Recorder(httpGatewayStub);
   }
 
   @Test
   public void canRecordMultipleRequests() {
     URL url = new URL("http://bar.org");
-    r.record(new Request("GET", url), "anotherResponse");
-    r.record(new Request("DELETE", url), "response");
+    httpGatewayStub.respondWith = "anotherResponse";
+    r.record(new Request("GET", url));
+    httpGatewayStub.respondWith = "response";
+    r.record(new Request("DELETE", url));
+
     assertThat(r.replay(new Request("GET", url)), is("anotherResponse"));
   }
 
   @Test
   public void responseComesFromExternalService() {
-    HttpGatewayStub httpGatewayStub = new HttpGatewayStub();
-    r = new Recorder(httpGatewayStub);
+    httpGatewayStub.respondWith = "stubbedResponse";
     URL url = new URL("http://bar.org");
     r.record(new Request("GET", url));
+
     assertThat(r.replay(new Request("GET", url)), is("stubbedResponse"));
   }
 
@@ -42,22 +47,20 @@ public class RecorderTest {
       this.httpGatewayStub = httpGatewayStub;
     }
 
-    public void record(Request request, String response) {
-      recordings.put(request, response);
-    }
-
     public String replay(Request request) {
       return recordings.get(request);
     }
 
     public void record(Request get) {
-      recordings.put(get, httpGatewayStub.get(get));
+      recordings.put(get, httpGatewayStub.execute(get));
     }
   }
 
   private class HttpGatewayStub {
-    public String get(Request r) {
-      return "stubbedResponse";
+    public String respondWith;
+
+    public String execute(Request request) {
+      return respondWith;
     }
   }
 }
