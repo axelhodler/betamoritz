@@ -10,33 +10,24 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class RecorderTest {
-  private Recorder r;
+  private Recorder recorder;
   private HttpGatewayStub httpGatewayStub;
 
   @Before
   public void initialize() {
     httpGatewayStub = new HttpGatewayStub();
-    r = new Recorder(httpGatewayStub);
+    recorder = new Recorder(httpGatewayStub);
   }
 
   @Test
   public void canRecordMultipleRequests() {
     URL url = new URL("http://bar.org");
     httpGatewayStub.respondWith = "anotherResponse";
-    r.record(new Request("GET", url));
+    recorder.record(new Request("GET", url));
     httpGatewayStub.respondWith = "response";
-    r.record(new Request("DELETE", url));
+    recorder.record(new Request("DELETE", url));
 
-    assertThat(r.replay(new Request("GET", url)), is("anotherResponse"));
-  }
-
-  @Test
-  public void responseComesFromExternalService() {
-    httpGatewayStub.respondWith = "stubbedResponse";
-    URL url = new URL("http://bar.org");
-    r.record(new Request("GET", url));
-
-    assertThat(r.replay(new Request("GET", url)), is("stubbedResponse"));
+    assertThat(recorder.replay(new Request("GET", url)), is("anotherResponse"));
   }
 
 }
