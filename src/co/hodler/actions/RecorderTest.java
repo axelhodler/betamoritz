@@ -1,11 +1,10 @@
-import co.hodler.boundaries.HttpGateway;
+package co.hodler.actions;
+
+import co.hodler.mocks.HttpGatewayStub;
 import co.hodler.models.Request;
 import co.hodler.models.URL;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -40,29 +39,4 @@ public class RecorderTest {
     assertThat(r.replay(new Request("GET", url)), is("stubbedResponse"));
   }
 
-  private class Recorder {
-    private Map<Request, String> recordings = new HashMap<>();
-    private HttpGateway httpGateway;
-
-    public Recorder(HttpGateway httpGateway) {
-      this.httpGateway = httpGateway;
-    }
-
-    public String replay(Request request) {
-      return recordings.get(request);
-    }
-
-    public void record(Request get) {
-      recordings.put(get, httpGateway.execute(get));
-    }
-  }
-
-  private class HttpGatewayStub implements HttpGateway {
-    public String respondWith;
-
-    @Override
-    public String execute(Request request) {
-      return respondWith;
-    }
-  }
 }
