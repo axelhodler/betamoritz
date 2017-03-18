@@ -1,3 +1,4 @@
+import co.hodler.boundaries.HttpGateway;
 import co.hodler.models.Request;
 import co.hodler.models.URL;
 import org.junit.Before;
@@ -41,10 +42,10 @@ public class RecorderTest {
 
   private class Recorder {
     private Map<Request, String> recordings = new HashMap<>();
-    private HttpGatewayStub httpGatewayStub;
+    private HttpGateway httpGateway;
 
-    public Recorder(HttpGatewayStub httpGatewayStub) {
-      this.httpGatewayStub = httpGatewayStub;
+    public Recorder(HttpGateway httpGateway) {
+      this.httpGateway = httpGateway;
     }
 
     public String replay(Request request) {
@@ -52,13 +53,14 @@ public class RecorderTest {
     }
 
     public void record(Request get) {
-      recordings.put(get, httpGatewayStub.execute(get));
+      recordings.put(get, httpGateway.execute(get));
     }
   }
 
-  private class HttpGatewayStub {
+  private class HttpGatewayStub implements HttpGateway {
     public String respondWith;
 
+    @Override
     public String execute(Request request) {
       return respondWith;
     }
