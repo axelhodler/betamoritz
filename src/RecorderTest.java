@@ -17,25 +17,32 @@ public class RecorderTest {
 
   @Test
   public void recordsRequests() {
-    r.record("http://foo.org", "response");
-    assertThat(r.replay("http://foo.org"), is("response"));
+    URL url = new URL("http://foo.org");
+    r.record(url, "response");
+    assertThat(r.replay(url), is("response"));
   }
 
   @Test
   public void canRecordMultipleRequests() {
-    r.record("http://bar.org", "anotherResponse");
-    assertThat(r.replay("http://bar.org"), is("anotherResponse"));
+    URL url = new URL("http://bar.org");
+    r.record(url, "anotherResponse");
+    assertThat(r.replay(url), is("anotherResponse"));
   }
 
   private class Recorder {
-    private Map<String, String> recordings = new HashMap<>();
+    private Map<URL, String> recordings = new HashMap<>();
 
-    public void record(String url, String response) {
+    public void record(URL url, String response) {
       recordings.put(url, response);
     }
 
-    public String replay(String url) {
+    public String replay(URL url) {
       return recordings.get(url);
+    }
+  }
+
+  private class URL {
+    public URL(String url) {
     }
   }
 }
