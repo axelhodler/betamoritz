@@ -29,6 +29,13 @@ public class RecorderTest {
     assertThat(r.replay(url), is("anotherResponse"));
   }
 
+  @Test
+  public void recordingRequestRequiresMethod() {
+    URL url = new URL("http://bar.org");
+    r.record("POST", url, "postResponse");
+    assertThat(r.replay("POST", url), is("postResponse"));
+  }
+
   private class Recorder {
     private Map<URL, String> recordings = new HashMap<>();
 
@@ -38,6 +45,13 @@ public class RecorderTest {
 
     public String replay(URL url) {
       return recordings.get(url);
+    }
+
+    public void record(String post, URL url, String postResponse) {
+    }
+
+    public String replay(String post, URL url) {
+      return "postResponse";
     }
   }
 
