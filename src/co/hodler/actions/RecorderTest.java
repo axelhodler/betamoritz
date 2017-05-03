@@ -20,7 +20,7 @@ public class RecorderTest {
   }
 
   @Test
-  public void canRecordMultipleRequests() {
+  public void records_multiple_requests() {
     URL url = new URL("http://bar.org");
     httpGatewayStub.respondWith = "anotherResponse";
     recorder.record(new Request("GET", url));
@@ -30,4 +30,10 @@ public class RecorderTest {
     assertThat(recorder.replay(new Request("GET", url)), is("anotherResponse"));
   }
 
+  @Test(expected = RuntimeException.class)
+  public void throws_runtime_exception_if_trying_to_replay_unrecorded_request() {
+    Request unrecordedRequest = new Request("GET", new URL("http://WILLFAIL.com"));
+
+    recorder.replay(unrecordedRequest);
+  }
 }

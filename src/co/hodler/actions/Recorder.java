@@ -15,6 +15,9 @@ public class Recorder {
   }
 
   public String replay(Request request) {
+    if (!recordings.containsKey(request)) {
+      throw new RuntimeException("The request you are trying to replay was never recorded");
+    }
     return recordings.get(request);
   }
 
