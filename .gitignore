@@ -2,3 +2,4 @@ out
 .DS_Store
 workspace.xml
 .idea/uiDesigner.xml
+.idea/kotlinc.xml
