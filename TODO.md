@@ -14,3 +14,6 @@ I want to record the response of the real API once and reuse the bottled respons
 
 In order to replay a response
 I need to store the response
+
+# General notes
+you can support all libraries that support setting a proxy. so in the @Before you set up your proxy and then do your stubbing.
