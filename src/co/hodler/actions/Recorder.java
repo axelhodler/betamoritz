@@ -5,6 +5,7 @@ import co.hodler.models.Request;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Recorder {
   private Map<Request, String> recordings = new HashMap<>();
@@ -21,7 +22,16 @@ public class Recorder {
     return recordings.get(request);
   }
 
-  public void record(Request get) {
-    recordings.put(get, httpGateway.execute(get));
+  public void record(Request request) {
+    recordings.put(request, httpGateway.execute(request));
+  }
+
+  public void update() {
+    recordings = recordings.entrySet()
+      .stream()
+      .collect(Collectors.toMap(
+        e -> e.getKey(),
+        e -> httpGateway.execute(e.getKey())
+      ));
   }
 }

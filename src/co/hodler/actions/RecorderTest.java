@@ -36,4 +36,16 @@ public class RecorderTest {
 
     recorder.replay(unrecordedRequest);
   }
+
+  @Test
+  public void can_update_recordings() {
+    URL url = new URL("http://beerapi.org/beers");
+    httpGatewayStub.respondWith = "someBeers";
+    recorder.record(new Request("GET", url));
+    httpGatewayStub.respondWith = "updatedBeers";
+
+    recorder.update();
+
+    assertThat(recorder.replay(new Request("GET", url)), is("updatedBeers"));
+  }
 }
