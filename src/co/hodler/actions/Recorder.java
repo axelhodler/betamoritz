@@ -4,35 +4,29 @@ import co.hodler.boundaries.HttpGateway;
 import co.hodler.models.Recording;
 import co.hodler.models.Request;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 public class Recorder {
-  private Map<Request, Recording> recordings = new HashMap<>();
   private HttpGateway httpGateway;
+  private Recordings recordings;
 
-  public Recorder(HttpGateway httpGateway) {
+  public Recorder(HttpGateway httpGateway, Recordings recordings) {
     this.httpGateway = httpGateway;
+    this.recordings = recordings;
   }
 
   public String replay(Request request) {
-    if (!recordings.containsKey(request)) {
+    if (!recordings.hasRecorded(request)) {
       throw new RuntimeException("The request you are trying to replay was never recorded");
     }
     return recordings.get(request).getContent();
   }
 
   public void record(Request request) {
-    recordings.put(request, new Recording(request, httpGateway.execute(request)));
+    recordings.store(new Recording(request, httpGateway.execute(request)));
   }
 
   public void update() {
-    recordings = recordings.entrySet()
+    recordings.allRecordedRequests()
       .stream()
-      .collect(Collectors.toMap(
-        e -> e.getKey(),
-        e -> new Recording(e.getKey(), httpGateway.execute(e.getKey()))
-      ));
+      .forEach(e -> recordings.store(new Recording(e, httpGateway.execute(e))));
   }
 }

@@ -9,6 +9,10 @@ public class Recording {
     this.content = content;
   }
 
+  public Request getRequest() {
+    return request;
+  }
+
   public String getContent() {
     return content;
   }

@@ -1,6 +1,7 @@
 package co.hodler.actions;
 
 import co.hodler.mocks.HttpGatewayStub;
+import co.hodler.mocks.InMemoryRecordings;
 import co.hodler.models.Request;
 import co.hodler.models.URL;
 import org.junit.Before;
@@ -16,7 +17,7 @@ public class RecorderTest {
   @Before
   public void initialize() {
     httpGatewayStub = new HttpGatewayStub();
-    recorder = new Recorder(httpGatewayStub);
+    recorder = new Recorder(httpGatewayStub, new InMemoryRecordings());
   }
 
   @Test
