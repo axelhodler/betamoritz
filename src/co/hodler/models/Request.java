@@ -1,16 +1,20 @@
 package co.hodler.models;
 
 public class Request {
-  private String post;
+  private String method;
   private final URL url;
 
   public Request(String method, URL url) {
-    this.post = method;
+    this.method = method;
     this.url = url;
   }
 
   public URL getUrl() {
     return url;
+  }
+
+  public String getMethod() {
+    return method;
   }
 
   @Override
@@ -20,14 +24,14 @@ public class Request {
 
     Request request = (Request) o;
 
-    if (post != null ? !post.equals(request.post) : request.post != null)
+    if (method != null ? !method.equals(request.method) : request.method != null)
       return false;
     return url != null ? url.equals(request.url) : request.url == null;
   }
 
   @Override
   public int hashCode() {
-    int result = post != null ? post.hashCode() : 0;
+    int result = method != null ? method.hashCode() : 0;
     result = 31 * result + (url != null ? url.hashCode() : 0);
     return result;
   }
