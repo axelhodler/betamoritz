@@ -1,0 +1,4 @@
+digraph G {
+  record -> ThirdPartyService ->"Storage.store";
+  replay -> Proxy ->"Storage.retrieve" -> Proxy -> replay;
+}
