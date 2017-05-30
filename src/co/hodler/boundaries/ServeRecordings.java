@@ -1,8 +1,6 @@
 package co.hodler.boundaries;
 
 import co.hodler.actions.Recorder;
-import co.hodler.e2e.ParsedRequest;
-import co.hodler.e2e.SocketServer;
 import co.hodler.models.Request;
 import co.hodler.models.URL;
 

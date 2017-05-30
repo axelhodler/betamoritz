@@ -1,4 +1,4 @@
-package co.hodler.e2e;
+package co.hodler.boundaries;
 
 import org.junit.After;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package co.hodler.e2e;
+package co.hodler.boundaries;
 
 public class ParsedRequest {
   private String path = "";

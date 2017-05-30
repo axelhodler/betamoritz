@@ -1,6 +1,6 @@
 package co.hodler.example;
 
-import co.hodler.e2e.SocketServer;
+import co.hodler.boundaries.SocketServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
