@@ -3,6 +3,9 @@ package co.hodler.boundaries;
 import co.hodler.actions.Recordings;
 import co.hodler.models.Recording;
 import co.hodler.models.Request;
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,7 +27,12 @@ public class FileSystemRecordings implements Recordings {
   public void store(Recording recording) {
     try {
       try (FileWriter fileWriter = new FileWriter("recordings.json")) {
-        fileWriter.write(recording.getContent());
+        JsonValue content = Json.parse(recording.getContent());
+        JsonObject method = new JsonObject();
+        method.set(recording.getRequest().getMethod(), content);
+        JsonObject request = new JsonObject();
+        request.set(recording.getRequest().getUrl().value(), method);
+        request.writeTo(fileWriter);
       };
     } catch (IOException e) {
       e.printStackTrace();
