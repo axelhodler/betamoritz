@@ -3,6 +3,8 @@ package co.hodler.boundaries;
 import co.hodler.models.Recording;
 import co.hodler.models.Request;
 import co.hodler.models.URL;
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonValue;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,5 +49,20 @@ public class FileSystemRecordingsTest {
     String s = new String(bytes, Charset.forName("UTF-8"));
 
     assertThat(s, containsString("content"));
+  }
+
+  @Test
+  public void persistsContentInJsonStructure() throws IOException {
+    fileSystemRecordings.store(
+      new Recording(
+        new Request("GET",
+          new URL("http://example.org")), "{ \"content\": \"content\" }"));
+
+    byte[] bytes = Files.readAllBytes(Paths.get("recordings.json"));
+    String s = new String(bytes, Charset.forName("UTF-8"));
+
+    JsonValue value = Json.parse(s);
+
+    assertThat(value.asObject().get("content").asString(), is("content"));
   }
 }
