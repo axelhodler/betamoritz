@@ -11,7 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Set;
 
-public class FileSystemRecordings implements Recordings {
+public class JsonRecordings implements Recordings {
 
   @Override
   public boolean hasRecorded(Request request) {

@@ -14,17 +14,17 @@ import java.io.IOException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-public class FileSystemRecordingsTest {
-  FileSystemRecordings fileSystemRecordings;
+public class JsonRecordingTest {
+  JsonRecordings jsonRecordings;
 
   @Before
   public void setUp() {
-    fileSystemRecordings = new FileSystemRecordings();
+    jsonRecordings = new JsonRecordings();
   }
 
   @Test
   public void persistsContentInJsonStructure() throws IOException {
-    fileSystemRecordings.store(
+    jsonRecordings.store(
       new Recording(
         new Request("GET",
           new URL("http://example.org")), "{ \"content\": \"content\" }"));
