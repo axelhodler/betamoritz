@@ -4,7 +4,7 @@ import co.hodler.actions.Recordings;
 import co.hodler.models.Recording;
 import co.hodler.models.Request;
 
-import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Set;
 
@@ -23,7 +23,9 @@ public class FileSystemRecordings implements Recordings {
   @Override
   public void store(Recording recording) {
     try {
-      new File("recordings.json").createNewFile();
+      try (FileWriter fileWriter = new FileWriter("recordings.json")) {
+        fileWriter.write(recording.getContent());
+      };
     } catch (IOException e) {
       e.printStackTrace();
       throw new RuntimeException("File to store the recordings could not be created");
