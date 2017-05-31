@@ -8,10 +8,8 @@ import com.eclipsesource.json.JsonValue;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -31,10 +29,7 @@ public class FileSystemRecordingsTest {
         new Request("GET",
           new URL("http://example.org")), "{ \"content\": \"content\" }"));
 
-    byte[] bytes = Files.readAllBytes(Paths.get("recordings.json"));
-    String s = new String(bytes, Charset.forName("UTF-8"));
-
-    JsonValue value = Json.parse(s);
+    JsonValue value = Json.parse(new FileReader("recordings.json"));
 
     assertThat(value.asObject().get("http://example.org").asObject().get("GET").asObject()
       .get("content").asString(), is("content"));
