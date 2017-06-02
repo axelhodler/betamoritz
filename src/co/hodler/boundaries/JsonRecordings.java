@@ -30,10 +30,14 @@ public class JsonRecordings implements Recordings {
   public void store(Recording recording) {
     JsonValue content = Json.parse(recording.getContent());
     JsonObject method = new JsonObject();
+    JsonObject storage = new JsonObject();
     method.set(recording.getRequest().getMethod(), content);
-    JsonObject request = new JsonObject();
-    request.set(recording.getRequest().getUrl().value(), method);
-    fileSystemAccess.writeToFile("recordings.json", request.toString());
+    if (fileSystemAccess.fileExists("recordings.json")) {
+      String s = fileSystemAccess.fileAsString("recordings.json");
+      storage = Json.parse(s).asObject();
+    }
+    storage.set(recording.getRequest().getUrl().value(), method);
+    fileSystemAccess.writeToFile("recordings.json", storage.toString());
   }
 
   @Override

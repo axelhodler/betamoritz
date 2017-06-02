@@ -5,12 +5,14 @@ import co.hodler.models.Request;
 import co.hodler.models.URL;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonValue;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -19,12 +21,17 @@ public class JsonRecordingTest {
   JsonRecordings jsonRecordings;
 
   @Before
-  public void setUp() {
+  public void set_up() {
     jsonRecordings = new JsonRecordings(new FileSystemAccess());
   }
 
+  @After
+  public void clean_up() throws IOException {
+    cleanUpFile("recordings.json");
+  }
+
   @Test
-  public void persistsContentInJsonStructure() throws IOException {
+  public void persists_content_in_json_structure() throws IOException {
     jsonRecordings.store(
       new Recording(
         new Request("GET",
@@ -37,7 +44,7 @@ public class JsonRecordingTest {
   }
 
   @Test
-  public void persistsContentWithRequestMetaInfos() throws IOException {
+  public void persists_content_with_request_meta_infos() throws IOException {
     jsonRecordings.store(
       new Recording(
         new Request("POST",
@@ -49,9 +56,8 @@ public class JsonRecordingTest {
       .get("bar").asString(), is("foo"));
   }
 
-  @Ignore
   @Test
-  public void canPersistMultipleRequests() throws IOException {
+  public void can_persist_multiple_requests() throws IOException {
     jsonRecordings.store(
       new Recording(
         new Request("POST",
@@ -59,13 +65,17 @@ public class JsonRecordingTest {
     jsonRecordings.store(
       new Recording(
         new Request("DELETE",
-          new URL("http://foo.org")), "{ \"response\": \"deleted\" }"));
+          new URL("http://foos.org")), "{ \"response\": \"deleted\" }"));
 
     JsonValue value = Json.parse(new FileReader("recordings.json"));
 
     assertThat(value.asObject().get("http://foo.org").asObject().get("POST").asObject()
       .get("bar").asString(), is("foo"));
-    assertThat(value.asObject().get("http://foo.org").asObject().get("DELETE").asObject()
+    assertThat(value.asObject().get("http://foos.org").asObject().get("DELETE").asObject()
       .get("response").asString(), is("deleted"));
+  }
+
+  private void cleanUpFile(String fileName) throws IOException {
+    Files.delete(Paths.get(fileName));
   }
 }
