@@ -7,13 +7,16 @@ import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Set;
 
 public class JsonRecordings implements Recordings {
 
-  @Override
+  private FileSystemAccess fileSystemAccess;
+
+  public JsonRecordings(FileSystemAccess fileSystemAccess) {
+    this.fileSystemAccess = fileSystemAccess;
+  }
+
   public boolean hasRecorded(Request request) {
     return false;
   }
@@ -25,19 +28,12 @@ public class JsonRecordings implements Recordings {
 
   @Override
   public void store(Recording recording) {
-    try {
-      try (FileWriter fileWriter = new FileWriter("recordings.json")) {
-        JsonValue content = Json.parse(recording.getContent());
-        JsonObject method = new JsonObject();
-        method.set(recording.getRequest().getMethod(), content);
-        JsonObject request = new JsonObject();
-        request.set(recording.getRequest().getUrl().value(), method);
-        request.writeTo(fileWriter);
-      };
-    } catch (IOException e) {
-      e.printStackTrace();
-      throw new RuntimeException("File to store the recordings could not be created");
-    }
+    JsonValue content = Json.parse(recording.getContent());
+    JsonObject method = new JsonObject();
+    method.set(recording.getRequest().getMethod(), content);
+    JsonObject request = new JsonObject();
+    request.set(recording.getRequest().getUrl().value(), method);
+    fileSystemAccess.writeToFile("recordings.json", request.toString());
   }
 
   @Override
