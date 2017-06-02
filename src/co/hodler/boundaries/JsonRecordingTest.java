@@ -37,9 +37,9 @@ public class JsonRecordingTest {
         new Request("GET",
           new URL("http://example.org")), "{ \"content\": \"content\" }"));
 
-    JsonValue value = Json.parse(new FileReader("recordings.json"));
+    JsonValue storage = readStorage();
 
-    assertThat(value.asObject().get("http://example.org").asObject().get("GET").asObject()
+    assertThat(storage.asObject().get("http://example.org").asObject().get("GET").asObject()
       .get("content").asString(), is("content"));
   }
 
@@ -50,9 +50,9 @@ public class JsonRecordingTest {
         new Request("POST",
           new URL("http://foo.org")), "{ \"bar\": \"foo\" }"));
 
-    JsonValue value = Json.parse(new FileReader("recordings.json"));
+    JsonValue storage = readStorage();
 
-    assertThat(value.asObject().get("http://foo.org").asObject().get("POST").asObject()
+    assertThat(storage.asObject().get("http://foo.org").asObject().get("POST").asObject()
       .get("bar").asString(), is("foo"));
   }
 
@@ -67,12 +67,16 @@ public class JsonRecordingTest {
         new Request("DELETE",
           new URL("http://foos.org")), "{ \"response\": \"deleted\" }"));
 
-    JsonValue value = Json.parse(new FileReader("recordings.json"));
+    JsonValue storage = readStorage();
 
-    assertThat(value.asObject().get("http://foo.org").asObject().get("POST").asObject()
+    assertThat(storage.asObject().get("http://foo.org").asObject().get("POST").asObject()
       .get("bar").asString(), is("foo"));
-    assertThat(value.asObject().get("http://foos.org").asObject().get("DELETE").asObject()
+    assertThat(storage.asObject().get("http://foos.org").asObject().get("DELETE").asObject()
       .get("response").asString(), is("deleted"));
+  }
+
+  private JsonValue readStorage() throws IOException {
+    return Json.parse(new FileReader("recordings.json"));
   }
 
   private void cleanUpFile(String fileName) throws IOException {
