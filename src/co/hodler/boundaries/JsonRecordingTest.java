@@ -75,6 +75,25 @@ public class JsonRecordingTest {
       .get("response").asString(), is("deleted"));
   }
 
+  @Test
+  public void can_persist_multiple_methods_on_same_request() throws IOException {
+    jsonRecordings.store(
+      new Recording(
+        new Request("POST",
+          new URL("http://foo.org")), "{ \"bar\": \"foo\" }"));
+    jsonRecordings.store(
+      new Recording(
+        new Request("GET",
+          new URL("http://foo.org")), "{ \"response\": \"deleted\" }"));
+
+    JsonValue storage = readStorage();
+
+    assertThat(storage.asObject().get("http://foo.org").asObject().get("POST").asObject()
+      .get("bar").asString(), is("foo"));
+    assertThat(storage.asObject().get("http://foo.org").asObject().get("GET").asObject()
+      .get("response").asString(), is("deleted"));
+  }
+
   private JsonValue readStorage() throws IOException {
     return Json.parse(new FileReader("recordings.json"));
   }

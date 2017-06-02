@@ -29,14 +29,19 @@ public class JsonRecordings implements Recordings {
   @Override
   public void store(Recording recording) {
     JsonValue content = Json.parse(recording.getContent());
-    JsonObject method = new JsonObject();
     JsonObject storage = new JsonObject();
-    method.set(recording.getRequest().getMethod(), content);
     if (fileSystemAccess.fileExists("recordings.json")) {
-      String s = fileSystemAccess.fileAsString("recordings.json");
-      storage = Json.parse(s).asObject();
+      String recordingContents = fileSystemAccess.fileAsString("recordings.json");
+      storage = Json.parse(recordingContents).asObject();
     }
-    storage.set(recording.getRequest().getUrl().value(), method);
+    String requestUrl = recording.getRequest().getUrl().value();
+    if (storage.get(requestUrl) == null) {
+      JsonObject method = new JsonObject();
+      method.set(recording.getRequest().getMethod(), content);
+      storage.set(requestUrl, method);
+    } else {
+      storage.get(requestUrl).asObject().set(recording.getRequest().getMethod(), content);
+    }
     fileSystemAccess.writeToFile("recordings.json", storage.toString());
   }
 
