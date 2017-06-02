@@ -25,4 +25,8 @@ public class FileSystemAccess {
       throw new RuntimeException(e);
     }
   }
+
+  public boolean fileExists(String fileName) {
+    return Files.isRegularFile(Paths.get(fileName));
+  }
 }
