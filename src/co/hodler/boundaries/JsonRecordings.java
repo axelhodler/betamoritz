@@ -11,9 +11,9 @@ import java.util.Set;
 
 public class JsonRecordings implements Recordings {
 
-  private FileSystemAccess fileSystemAccess;
+  private RecordsFile fileSystemAccess;
 
-  public JsonRecordings(FileSystemAccess fileSystemAccess) {
+  public JsonRecordings(RecordsFile fileSystemAccess) {
     this.fileSystemAccess = fileSystemAccess;
   }
 
@@ -30,8 +30,8 @@ public class JsonRecordings implements Recordings {
   public void store(Recording recording) {
     JsonValue content = Json.parse(recording.getContent());
     JsonObject storage = new JsonObject();
-    if (fileSystemAccess.fileExists("recordings.json")) {
-      String recordingContents = fileSystemAccess.fileAsString("recordings.json");
+    if (fileSystemAccess.exists()) {
+      String recordingContents = fileSystemAccess.readContents();
       storage = Json.parse(recordingContents).asObject();
     }
     String requestUrl = recording.getRequest().getUrl().value();
@@ -42,7 +42,7 @@ public class JsonRecordings implements Recordings {
     } else {
       storage.get(requestUrl).asObject().set(recording.getRequest().getMethod(), content);
     }
-    fileSystemAccess.writeToFile("recordings.json", storage.toString());
+    fileSystemAccess.replaceContentsWith(storage.toString());
   }
 
   @Override

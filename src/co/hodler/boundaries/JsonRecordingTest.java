@@ -20,14 +20,16 @@ import static org.hamcrest.core.Is.is;
 public class JsonRecordingTest {
   JsonRecordings jsonRecordings;
 
+  private final String RECORDS_FILE = "recordings.json";
+
   @Before
   public void set_up() {
-    jsonRecordings = new JsonRecordings(new FileSystemAccess());
+    jsonRecordings = new JsonRecordings(new RecordsFile(RECORDS_FILE));
   }
 
   @After
   public void clean_up() throws IOException {
-    cleanUpFile("recordings.json");
+    cleanUpRecordings();
   }
 
   @Test
@@ -98,7 +100,7 @@ public class JsonRecordingTest {
     return Json.parse(new FileReader("recordings.json"));
   }
 
-  private void cleanUpFile(String fileName) throws IOException {
-    Files.delete(Paths.get(fileName));
+  private void cleanUpRecordings() throws IOException {
+    Files.delete(Paths.get(RECORDS_FILE));
   }
 }
