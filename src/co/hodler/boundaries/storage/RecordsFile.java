@@ -1,4 +1,4 @@
-package co.hodler.boundaries;
+package co.hodler.boundaries.storage;
 
 import java.io.FileWriter;
 import java.io.IOException;

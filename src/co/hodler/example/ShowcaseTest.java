@@ -1,9 +1,9 @@
 package co.hodler.example;
 
 import co.hodler.actions.Recorder;
-import co.hodler.boundaries.DefaultHttpGateway;
-import co.hodler.boundaries.ExecuteHttpRequest;
-import co.hodler.boundaries.ServeRecordings;
+import co.hodler.boundaries.http.DefaultHttpGateway;
+import co.hodler.boundaries.http.ExecuteHttpRequest;
+import co.hodler.boundaries.http.ServeRecordings;
 import co.hodler.mocks.InMemoryRecordings;
 import co.hodler.models.Request;
 import co.hodler.models.URL;

@@ -1,4 +1,4 @@
-package co.hodler.boundaries;
+package co.hodler.boundaries.http;
 
 public class ParsedRequest {
   private String path = "";

@@ -1,6 +1,6 @@
 package co.hodler.actions;
 
-import co.hodler.boundaries.HttpGateway;
+import co.hodler.boundaries.http.HttpGateway;
 import co.hodler.models.Recording;
 import co.hodler.models.Request;
 

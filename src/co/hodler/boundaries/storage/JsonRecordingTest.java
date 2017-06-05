@@ -1,4 +1,4 @@
-package co.hodler.boundaries;
+package co.hodler.boundaries.storage;
 
 import co.hodler.models.Recording;
 import co.hodler.models.Request;

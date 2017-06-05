@@ -1,4 +1,4 @@
-package co.hodler.boundaries;
+package co.hodler.boundaries.http;
 
 import java.net.ServerSocket;
 import java.net.Socket;

@@ -1,4 +1,4 @@
-package co.hodler.boundaries;
+package co.hodler.boundaries.storage;
 
 import org.junit.Before;
 import org.junit.Test;

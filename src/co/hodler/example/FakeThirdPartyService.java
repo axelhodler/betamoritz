@@ -1,6 +1,6 @@
 package co.hodler.example;
 
-import co.hodler.boundaries.SocketServer;
+import co.hodler.boundaries.http.SocketServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
