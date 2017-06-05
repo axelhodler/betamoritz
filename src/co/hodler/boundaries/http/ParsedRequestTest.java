@@ -33,4 +33,18 @@ public class ParsedRequestTest {
 
     assertThat(parsedRequest.getPath(), is("/"));
   }
+
+  @Test
+  public void extracts_the_method() {
+    ParsedRequest parsedRequest = new ParsedRequest("GET / HTTP/1.1");
+
+    assertThat(parsedRequest.getMethod(), is("GET"));
+  }
+
+  @Test
+  public void extracts_the_method_triangulate() {
+    ParsedRequest parsedRequest = new ParsedRequest("POST / HTTP/1.1");
+
+    assertThat(parsedRequest.getMethod(), is("POST"));
+  }
 }
