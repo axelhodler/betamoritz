@@ -1,5 +1,6 @@
-package co.hodler.boundaries.storage;
+package co.hodler.storage;
 
+import co.hodler.boundaries.storage.RecordsFile;
 import org.junit.Before;
 import org.junit.Test;
 

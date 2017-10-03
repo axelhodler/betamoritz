@@ -1,5 +1,6 @@
-package co.hodler.boundaries.http;
+package co.hodler.http;
 
+import co.hodler.boundaries.http.SocketServer;
 import org.junit.After;
 import org.junit.Test;
 

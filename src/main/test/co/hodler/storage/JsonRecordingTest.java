@@ -1,5 +1,7 @@
-package co.hodler.boundaries.storage;
+package co.hodler.storage;
 
+import co.hodler.boundaries.storage.JsonRecordings;
+import co.hodler.boundaries.storage.RecordsFile;
 import co.hodler.models.Recording;
 import co.hodler.models.Request;
 import co.hodler.models.URL;
