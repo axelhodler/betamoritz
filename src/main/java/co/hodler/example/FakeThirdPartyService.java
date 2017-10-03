@@ -1,5 +1,6 @@
 package co.hodler.example;
 
+import co.hodler.boundaries.http.ParsedRequest;
 import co.hodler.boundaries.http.SocketServer;
 
 import java.io.BufferedReader;
@@ -18,7 +19,11 @@ public class FakeThirdPartyService {
         BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
       ) {
+        ParsedRequest parsedRequest = new ParsedRequest(reader.readLine());
         String fakeResponse = "someBeers";
+        if ("POST".equals(parsedRequest.getMethod())) {
+          fakeResponse = "{\"content\":\"beer created\"}";
+        }
         out.println("HTTP/1.1 200 OK");
         out.println("Content-Length: " + fakeResponse.length() + "\n");
         out.println(fakeResponse);
